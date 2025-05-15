@@ -49,7 +49,7 @@ Or if you have husky installed:
   "checkSecurity": true,
   "checkPerformance": true,
   "checkStyle": false,
-  "enabledFileExtensions": [".js", ".ts", ".jsx", ".tsx", ".vue"]
+  "enabledFileExtensions": ".html, .js, .jsx, .ts, .tsx, .vue"
 }
 ```
 
