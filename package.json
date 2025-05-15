@@ -1,0 +1,27 @@
+{
+  "name": "ai-pre-commit-reviewer",
+  "version": "1.0.3",
+  "description": "AI-powered git pre-commit hook for automated code review",
+  "main": "src/pre-commit.js",
+  "type": "module",
+  "scripts": {
+    "pre-commit": "node src/pre-commit.js"
+  },
+  "bin": {
+    "add-ai-review": "./src/cli.js",
+    "ai-code-review-run": "./src/ai-review.js"
+  },
+  "keywords": [
+    "ai",
+    "pre-commit",
+    "code-review",
+    "git-hooks"
+  ],
+  "author": "puppy",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "chalk": "^5.4.1",
+    "uuid": "^11.1.0"
+  }
+}
