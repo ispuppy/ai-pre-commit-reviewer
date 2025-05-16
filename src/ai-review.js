@@ -101,22 +101,13 @@ function handleError (text, message) {
 
 function handleReviewResult(result, completeConfig) {
   let exitCode = 0
-  if(result.list.length) {
-    if(result.result === 'NO') {
-      console.log(chalk.redBright('X Code review was not passed.Please fix the following high-level issues and try again.'))
-      exitCode = 1
-    } else {
-      console.log(chalk.green('√ Code review passed.'))
-      exitCode = 0 
-    } 
-  } else if(result.errors.length) {
-    console.log(chalk.redBright(result.errors[0]))
-    exitCode = 1 
-    if(result.result === 'YES') {
-      console.log(chalk.green('√ Code review passed.'))
-      exitCode = 0 
-    }
-  }
+  if(result.result === 'NO') {
+    console.log(chalk.redBright('X Code review was not passed.Please fix the following high-level issues and try again.'))
+    exitCode = 1
+  } else {
+    console.log(chalk.green('√ Code review passed.'))
+    exitCode = 0 
+  } 
   const printList =  result.list.filter(issue => {
     if(issue.severity === 'high') {
       return true
@@ -136,6 +127,8 @@ function handleReviewResult(result, completeConfig) {
         console.log(chalk.redBright(error)) 
       })
     }
+  } else if(result.errors.length) {
+    console.log(chalk.redBright(result.errors[0]))
   }
   process.exit(exitCode)
 }
