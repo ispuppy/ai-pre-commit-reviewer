@@ -1,6 +1,6 @@
 {
   "name": "ai-pre-commit-reviewer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "AI-powered git pre-commit hook for automated code review",
   "main": "src/pre-commit.js",
   "type": "module",
