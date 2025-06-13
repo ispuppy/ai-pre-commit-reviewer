@@ -1,11 +1,11 @@
 {
   "name": "ai-pre-commit-reviewer",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "AI-powered git pre-commit hook for automated code review",
   "main": "src/pre-commit.js",
   "type": "module",
   "scripts": {
-    "pre-commit": "node src/pre-commit.js"
+    "pre-commit": "node src/ai-review.js"
   },
   "bin": {
     "add-ai-review": "./src/cli.js",

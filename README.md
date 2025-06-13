@@ -4,6 +4,7 @@ AI-powered git pre-commit hook for automated code review with customizable rules
 
 ## Features
 
+- 🤖 **Multi-Model Support**: Works with OpenAI and Ollama
 - 🔍 **Smart Diff Analysis**: Focuses on meaningful changes, ignores deletions
 - ⚙️ **Customizable Rules**: Security, performance, style checks
 - 📊 **Graded Feedback**: High/Medium/Low severity classification
@@ -67,12 +68,13 @@ language=chinese
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| providerType | string | "openai" | AI provider type (openai) |
-| apiKey | string | - | Provider API key |
+| providerType | string | "openai" | AI provider type (openai or ollama) |
+| apiKey | string | - | Provider API key (not required for Ollama) |
 | model | string | "gpt-3.5-turbo" | Model name |
 | temperature | number | 0.2 | Controls randomness of AI output (higher = more random) |
-| baseURL | string | "https://api.openai.com/v1" | API base URL |
+| baseURL | string | `"https://api.openai.com/v1"` (OpenAI)<br>`"http://localhost:11434"` (Ollama) | API base URL |
 | maxChunkSize | number | 12000 | Max diff chunk size (characters) |
+| customPrompts | string | '' |Custom prompt templates. When provided, these will completely replace the default security (checkSecurity), performance (checkPerformance) and style (checkStyle) checks. |
 | language | string | "chinese" | Output language |
 | strict | boolean | true | Fail on API errors |
 | showNormal | boolean | false | Show low/medium severity issues |
@@ -114,6 +116,21 @@ X Code review was not passed.Please fix the following high-level issues and try 
 - Optional: `model` (default: gpt-3.5-turbo), `baseURL` (default: https://api.openai.com/v1)
 - Models: gpt-4, gpt-3.5-turbo
 
+### Ollama (Local AI Models)
+
+- Required: None (runs locally)
+- Optional: `model` (default: gpt-3.5-turbo), `baseURL` (default: http://localhost:11434)
+- Setup:
+  1. Install Ollama: https://ollama.ai/
+  2. Download models: `ollama pull <model-name>`
+  3. Common models: llama2, codellama, mistral
+- Example .env configuration:
+  ```env
+  providerType=ollama
+  model=codellama
+  baseURL=http://localhost:11434
+  ```
+
 ## Troubleshooting
 
 ### Hook not running
@@ -122,7 +139,7 @@ X Code review was not passed.Please fix the following high-level issues and try 
 - Check file contains `node path/to/ai-review.js`
 
 ### API Errors
-- Verify API key and base URL
+- Verify API key and base URL (not required for Ollama)
 - Check network connectivity
 - Set `strict: false` to allow commit on API errors
 

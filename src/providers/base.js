@@ -37,4 +37,26 @@ export default class AIProvider {
     }
     providers[providerType] = providerClass;
   }
+
+  getValueFromText(content) {
+    try {
+      // 尝试直接解析JSON
+      return JSON.parse(content);
+    } catch (e) {
+      // 如果是Markdown格式，尝试提取JSON代码块
+      const markdownJsonMatch = content.match(/```(?:json)?\n([\s\S]*?)\n```/);
+      if (markdownJsonMatch) {
+        try {
+          return JSON.parse(markdownJsonMatch[1]);
+        } catch (e) {
+          try {
+            const fixedJson = markdownJsonMatch[1].replace(/([\w\d]+):/g, '"$1":').replace(/'/g, '"'); // 修复JSON格式
+            return JSON.parse(fixedJson);
+          } catch (e) {
+            throw new Error('Failed to parse JSON from response');
+          }
+        }
+      }
+    }
+  }
 }

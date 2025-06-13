@@ -10,13 +10,14 @@ import AIError from './AIError.js'
 const defaultConfig = {
   providerType: 'OPENAI',
   model: 'gpt-3.5-turbo',
-  baseURL: 'https://api.openai.com',
+  baseURL: '',
 
   maxChunkSize: 12000,
   temperature: 0.2,
   language: 'chinese',
   strict: true,
   showNormal: false,
+  customPrompts: '',
   enabledFileExtensions: '.html, .js, .jsx, .ts, .tsx, .vue',
 
   checkSecurity: true,

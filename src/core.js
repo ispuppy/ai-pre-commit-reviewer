@@ -15,8 +15,8 @@ export default class CodeReviewer {
     if (!config || typeof config !== 'object') {
       throw new Error('Config must be an object')
     }
-
-    if(!config.apiKey) {
+    const providerType = config.providerType.toUpperCase();
+    if(!config.apiKey && providerType !== 'OLLAMA') {
       throw new Error('apiKey is required in config')
     } 
   }
@@ -198,30 +198,11 @@ export default class CodeReviewer {
     return chunks
   }
   generateReviewPrompt(diff) {
-    const { language, checkSecurity, checkPerformance, checkStyle } = this.config
+    const { language } = this.config
     let systemPrompt = `${prompts.system}\n`
     let userPrompt = `${prompts.instruction}:\n\n<git_diff>\n${diff}\n</git_diff>\n\n`
-    const analyzeList = []
-    if (checkSecurity) {
-      analyzeList.push('security') 
-    }
-    if (checkPerformance) {
-      analyzeList.push('performance') 
-    }
-    if (checkStyle) {
-      analyzeList.push('style') 
-    }
-    if (analyzeList.length === 0) {
-      analyzeList.push('general') 
-    }
-    analyzeList.forEach((item) => {
-      systemPrompt += `\n${prompts.rules[item].name}`
-      prompts.rules[item].checks.forEach((check) => {
-        systemPrompt += `\n- ${check}`
-      })
-
-      systemPrompt += `\n${prompts.rules[item].severity_guidance}\n`
-    })
+    const { reviewContentPrompt, analyzeList} = this.getReviewContentPrompt()
+    systemPrompt += reviewContentPrompt
     systemPrompt += `\n${prompts.response.requirement}\n`
     Object.entries(prompts.response.fields).forEach(([key, description]) => {
       systemPrompt += `\n${key}: ${description}\n`
@@ -237,5 +218,35 @@ export default class CodeReviewer {
       }
     })
     return { systemPrompt, userPrompt }
+  }
+
+  getReviewContentPrompt() {
+    const { checkSecurity, checkPerformance, checkStyle, customPrompts} = this.config
+    if (customPrompts) {
+      return {
+        reviewContentPrompt: customPrompts,
+        analyzeList: ['customized']
+      }
+    }
+    let ouput = ''
+    const analyzeList = [
+      checkSecurity && 'security',
+      checkPerformance && 'performance',
+      checkStyle && 'style'
+    ].filter(Boolean);
+    if (analyzeList.length === 0) {
+      analyzeList.push('general') 
+    }
+    analyzeList.forEach((item) => {
+      ouput += `${prompts.rules[item].name}\n`
+      prompts.rules[item].checks.forEach((check) => {
+        ouput += `\n- ${check}`
+      })
+      ouput += `\n${prompts.rules[item].severity_guidance}\n`
+    })
+    return {
+      reviewContentPrompt: ouput,
+      analyzeList
+    }
   }
 }

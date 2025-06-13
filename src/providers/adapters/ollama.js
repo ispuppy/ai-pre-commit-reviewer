@@ -1,46 +1,41 @@
 import axios from 'axios';
 import AIProvider from '../base.js';
 import AIError from '../../AIError.js';
-import { v4 } from 'uuid';
 
-export class OpenAIProvider extends AIProvider {
+export class OllamaProvider extends AIProvider {
   constructor(config) {
     super(config);
     this.client = axios.create({
-      baseURL: this.config.baseURL || 'https://api.openai.com',
+      baseURL: this.config.baseURL || 'http://localhost:11434',
       headers: {
-        'Authorization': `Bearer ${this.config.apiKey}`,
         'Content-Type': 'application/json'
-      }
+      },
+      timeout: 3 * 60 * 1000
     });
   }
 
   /**
-   * Analyze code with OpenAI API
+   * Analyze code with Ollama API
    * @param {string} prompt - Prompt for analysis
    * @param {object} options - Analysis options
    * @returns {Promise<object>} Analysis results
    */
   async analyze(prompt) {
     try {
-      const messages = [
-        {
-          role: 'system',
-          content: prompt.systemPrompt
-        },
-        {
-          role: 'user',
-          content: prompt.userPrompt
-        }
-      ];
-      const response = await this.client.post('/v1/chat/completions', {
-        messages,
+      const response = await this.client.post('/api/chat',{
         model: this.config.model,
-        temperature: this.config.temperature,
-        stream: false,
-        chatId: v4()
+        messages: [
+          {
+            role: 'system',
+            content: prompt.systemPrompt
+          },
+          {
+            role: 'user',
+            content: prompt.userPrompt
+          }
+        ],
+        stream: false
       });
-
       const results = this.parseResponse(response.data);
       return results;
     } catch (error) {
@@ -49,12 +44,12 @@ export class OpenAIProvider extends AIProvider {
   }
 
   /**
-   * Parse OpenAI API response into standard format
+   * Parse Ollama API response into standard format
    * @param {object} response - Raw API response
    * @returns {object} Standardized analysis results
    */
   parseResponse(response) {
-    const content = response.choices[0]?.message?.content || '';
+    const content = response.message?.content || '';
     return this.getValueFromText(content)
   }
 }
