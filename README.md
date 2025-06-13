@@ -139,13 +139,19 @@ X Code review was not passed.Please fix the following high-level issues and try 
 - Check file contains `node path/to/ai-review.js`
 
 ### API Errors
+
 - Verify API key and base URL (not required for Ollama)
 - Check network connectivity
 - Set `strict: false` to allow commit on API errors
 
-### No issues found
+### No changes found
+
 - Check `enabledFileExtensions` matches your file types
 - Verify changes are staged (`git add`)
+
+### Failed to parse JSON from response
+
+The model fails to produce valid JSON output, indicating potential limitations in its instruction-following capability. Ensure the model is capable of generating structured data.
 
 ## License
 
