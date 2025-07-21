@@ -4,9 +4,10 @@ AI-powered git pre-commit hook for automated code review with customizable rules
 
 ## Features
 
-- 🤖 **Multi-Model Support**: Works with OpenAI and Ollama
+- 🤖 **Multi-Model Support**: Works with OpenAI、Deepseek and Ollama
 - 🔍 **Smart Diff Analysis**: Focuses on meaningful changes, ignores deletions
 - ⚙️ **Customizable Rules**: Security, performance, style checks
+- ✏️ **Custom Prompts**: Fully customize review criteria and prompts
 - 📊 **Graded Feedback**: High/Medium/Low severity classification
 - 🛠 **Easy Integration**: Simple npm install and config
 
@@ -68,11 +69,11 @@ language=chinese
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| providerType | string | "openai" | AI provider type (openai or ollama) |
+| providerType | string | "openai" | AI provider type (openai、deepseek or ollama) |
 | apiKey | string | - | Provider API key (not required for Ollama) |
 | model | string | "gpt-3.5-turbo" | Model name |
 | temperature | number | 0.2 | Controls randomness of AI output (higher = more random) |
-| baseURL | string | `"https://api.openai.com/v1"` (OpenAI)<br>`"http://localhost:11434"` (Ollama) | API base URL |
+| baseURL | string | `"https://api.openai.com"` (OpenAI)<br>`"https://api.deepseek.com"` (Deepseek)<br>`"http://localhost:11434"` (Ollama) | API base URL |
 | maxChunkSize | number | 12000 | Max diff chunk size (characters) |
 | customPrompts | string | '' |Custom prompt templates. When provided, these will completely replace the default security (checkSecurity), performance (checkPerformance) and style (checkStyle) checks. |
 | language | string | "chinese" | Output language |
@@ -113,8 +114,14 @@ X Code review was not passed.Please fix the following high-level issues and try 
 ### OpenAI
 
 - Required: `apiKey`
-- Optional: `model` (default: gpt-3.5-turbo), `baseURL` (default: https://api.openai.com/v1)
+- Optional: `model` (default: gpt-3.5-turbo), `baseURL` (default: https://api.openai.com)
 - Models: gpt-4, gpt-3.5-turbo
+  
+### Deepseek
+
+- Required: `apiKey`
+- Optional: `model` (default: deepseek-chat), `baseURL` (default: https://api.deepseek.com)
+- Models: deepseek-chat、deepseek-reasoner
 
 ### Ollama (Local AI Models)
 
@@ -149,7 +156,7 @@ X Code review was not passed.Please fix the following high-level issues and try 
 - Check `enabledFileExtensions` matches your file types
 - Verify changes are staged (`git add`)
 
-### Failed to parse JSON from response
+### The returned data format does not conform to the specification
 
 The model fails to produce valid JSON output, indicating potential limitations in its instruction-following capability. Ensure the model is capable of generating structured data.
 

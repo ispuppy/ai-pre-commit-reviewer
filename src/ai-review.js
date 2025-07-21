@@ -9,7 +9,7 @@ import AIError from './AIError.js'
 
 const defaultConfig = {
   providerType: 'OPENAI',
-  model: 'gpt-3.5-turbo',
+  model: '',
   baseURL: '',
 
   maxChunkSize: 12000,

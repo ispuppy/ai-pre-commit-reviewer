@@ -14,6 +14,12 @@ export class OllamaProvider extends AIProvider {
     });
   }
 
+  getAIConfig() {
+    return {
+      model: 'gpt-3.5-turbo',
+      baseURL: 'http://localhost:11434'
+    }
+  }
   /**
    * Analyze code with Ollama API
    * @param {string} prompt - Prompt for analysis
@@ -50,6 +56,6 @@ export class OllamaProvider extends AIProvider {
    */
   parseResponse(response) {
     const content = response.message?.content || '';
-    return this.getValueFromText(content)
+    return this.extractData(content)
   }
 }

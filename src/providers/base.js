@@ -1,8 +1,15 @@
 const providers = {};
 
+const ERROR_FORMAT_MSG = 'The returned data format does not conform to the specification'
 export default class AIProvider {
   constructor(config) {
-    this.config = config;
+    const providerType = config.providerType.toUpperCase()
+    const { baseURL: defaultURL, model: defaultModel } = this.getAIConfig(providerType)
+    this.config = { 
+      ...config, 
+      baseURL: config.baseURL || defaultURL, 
+      model: config.model || defaultModel 
+    }
   }
 
   /**
@@ -38,6 +45,20 @@ export default class AIProvider {
     providers[providerType] = providerClass;
   }
 
+  extractData(content) {
+    const data = this.getValueFromText(content)
+    return this.validateFormat(data)
+  }
+
+  validateFormat(result) {
+    if(!Reflect.has(result, 'result')) {
+      throw new Error(ERROR_FORMAT_MSG)
+    }
+    if(!Reflect.has(result, 'list') || !Array.isArray(result.list)) {
+      throw new Error(ERROR_FORMAT_MSG)
+    }
+    return result
+  }
   getValueFromText(content) {
     try {
       // 尝试直接解析JSON
@@ -53,7 +74,7 @@ export default class AIProvider {
             const fixedJson = markdownJsonMatch[1].replace(/([\w\d]+):/g, '"$1":').replace(/'/g, '"'); // 修复JSON格式
             return JSON.parse(fixedJson);
           } catch (e) {
-            throw new Error('Failed to parse JSON from response');
+            throw new Error(ERROR_FORMAT_MSG);
           }
         }
       }

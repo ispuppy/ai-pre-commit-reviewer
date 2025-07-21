@@ -15,6 +15,29 @@ export class OpenAIProvider extends AIProvider {
     });
   }
 
+  get deepSeekConfig() {
+    return {
+      model: 'deepseek-chat',
+      baseURL: 'https://api.deepseek.com',
+    }
+  }
+
+  get openAiConfig() {
+    return {
+      model: 'gpt-3.5-turbo',
+      baseURL: 'https://api.openai.com',
+    }
+  }
+  getAIConfig(providerType) {
+    switch (providerType) {
+      case 'OPENAI':
+        return this.openAiConfig;
+      case 'DEEPSEEK':
+        return this.deepSeekConfig;
+      default:
+        return this.openAiConfig;
+    }
+  }
   /**
    * Analyze code with OpenAI API
    * @param {string} prompt - Prompt for analysis
@@ -55,6 +78,6 @@ export class OpenAIProvider extends AIProvider {
    */
   parseResponse(response) {
     const content = response.choices[0]?.message?.content || '';
-    return this.getValueFromText(content)
+    return this.extractData(content)
   }
 }
