@@ -1,4 +1,4 @@
-# AI 代码审查 [English](README.md)
+# AI 代码审查 [English Md](README.md)
 
 基于人工智能的git pre-commit钩子，提供自动化代码审查功能，支持自定义规则。
 

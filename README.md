@@ -1,4 +1,4 @@
-# AI Code Review [中文](README.zh-CN.md)
+# AI Code Review [中文文档](README.zh-CN.md)
 
 AI-powered git pre-commit hook for automated code review with customizable rules.
 
