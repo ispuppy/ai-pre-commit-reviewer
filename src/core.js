@@ -15,8 +15,9 @@ export default class CodeReviewer {
     if (!config || typeof config !== 'object') {
       throw new Error('Config must be an object')
     }
+    const whiteList = ['LMSTUDIO', 'OLLAMA']
     const providerType = config.providerType.toUpperCase();
-    if(!config.apiKey && providerType !== 'OLLAMA') {
+    if(!config.apiKey && !whiteList.includes(providerType)) {
       throw new Error('apiKey is required in config')
     } 
   }
@@ -33,6 +34,13 @@ export default class CodeReviewer {
       try {
         const prompt = this.generateReviewPrompt(chunk)
         const result = await this.provider.analyze(prompt)
+        if(this.config.correctedResult) {
+          if(result.list?.every(item => item.severity !== 'high')) {
+            result.result = 'YES'
+          } else {
+            result.result = 'NO'
+          }
+        }
         return result
       } catch (error) {
         return {error: error}

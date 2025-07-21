@@ -17,6 +17,7 @@ const defaultConfig = {
   language: 'chinese',
   strict: true,
   showNormal: false,
+  correctedResult: true,
   customPrompts: '',
   enabledFileExtensions: '.html, .js, .jsx, .ts, .tsx, .vue',
 

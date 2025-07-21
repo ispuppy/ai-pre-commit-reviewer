@@ -1,10 +1,10 @@
-# AI Code Review
+# AI Code Review [中文](README.zh-CN.md)
 
 AI-powered git pre-commit hook for automated code review with customizable rules.
 
 ## Features
 
-- 🤖 **Multi-Model Support**: Works with OpenAI、Deepseek and Ollama
+- 🤖 **Multi-Model Support**: Works with OpenAI、Deepseek and Ollama、LM Studio
 - 🔍 **Smart Diff Analysis**: Focuses on meaningful changes, ignores deletions
 - ⚙️ **Customizable Rules**: Security, performance, style checks
 - ✏️ **Custom Prompts**: Fully customize review criteria and prompts
@@ -69,15 +69,16 @@ language=chinese
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| providerType | string | "openai" | AI provider type (openai、deepseek or ollama) |
-| apiKey | string | - | Provider API key (not required for Ollama) |
+| providerType | string | "openai" | AI provider type (openai、deepseek or ollama、LMStudio) |
+| apiKey | string | - | Provider API key (not required for Ollama or LMStudio) |
 | model | string | "gpt-3.5-turbo" | Model name |
 | temperature | number | 0.2 | Controls randomness of AI output (higher = more random) |
-| baseURL | string | `"https://api.openai.com"` (OpenAI)<br>`"https://api.deepseek.com"` (Deepseek)<br>`"http://localhost:11434"` (Ollama) | API base URL |
+| baseURL | string | `"https://api.openai.com"` (OpenAI)<br>`"https://api.deepseek.com"` (Deepseek)<br>`"http://localhost:11434"` (Ollama)<br>`"http://127.0.0.1:1234"` (LM Studio)| API base URL |
 | maxChunkSize | number | 12000 | Max diff chunk size (characters) |
 | customPrompts | string | '' |Custom prompt templates. When provided, these will completely replace the default security (checkSecurity), performance (checkPerformance) and style (checkStyle) checks. |
 | language | string | "chinese" | Output language |
 | strict | boolean | true | Fail on API errors |
+| correctedResult | boolean | true | When the result field in the AI's returned result does not match the specific detection item result in the list, the system will automatically correct the final determination result based on the actual detection problem.  |
 | showNormal | boolean | false | Show low/medium severity issues |
 | checkSecurity | boolean | true | Enable security checks |
 | checkPerformance | boolean | true | Enable performance checks |
@@ -137,6 +138,11 @@ X Code review was not passed.Please fix the following high-level issues and try 
   model=codellama
   baseURL=http://localhost:11434
   ```
+
+### LMStudio (Local AI Models)
+
+- Required: None (runs locally)
+- Optional: `model` (default: qwen/qwq-32b), `baseURL` (default: http://127.0.0.1:1234)
 
 ## Troubleshooting
 

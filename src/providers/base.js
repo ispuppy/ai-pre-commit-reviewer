@@ -46,7 +46,7 @@ export default class AIProvider {
   }
 
   extractData(content) {
-    const data = this.getValueFromText(content)
+    const data = this.getValueFromText(content) || {}
     return this.validateFormat(data)
   }
 

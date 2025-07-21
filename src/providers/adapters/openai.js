@@ -22,6 +22,12 @@ export class OpenAIProvider extends AIProvider {
     }
   }
 
+  get LMStudioConfig() {
+    return {
+      model: 'qwen/qwq-32b',
+      baseURL: 'http://127.0.0.1:1234',
+    }
+  }
   get openAiConfig() {
     return {
       model: 'gpt-3.5-turbo',
@@ -34,6 +40,8 @@ export class OpenAIProvider extends AIProvider {
         return this.openAiConfig;
       case 'DEEPSEEK':
         return this.deepSeekConfig;
+      case 'LMSTUDIO':
+        return this.LMStudioConfig;
       default:
         return this.openAiConfig;
     }
